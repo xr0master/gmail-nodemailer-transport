@@ -1,0 +1,45 @@
+{
+  "name": "gmail-nodemailer-transport",
+  "version": "1.0.0",
+  "description": "Gmail API and Nodemailer v4+. The plugin uses send scope only",
+  "private": false,
+  "author": "Sergey Khomushin <xr0master@gmail.com>",
+  "license": "MIT",
+  "main": "dist/GmailTransport.js",
+  "types": "dist/GmailTransport.d.ts",
+  "keywords": [
+    "gmail",
+    "nodemailer",
+    "transport",
+    "gmail nodemailer transport",
+    "nodemailer gmail transport"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xr0master/gmail-nodemailer-transport.git"
+  },
+  "scripts": {
+    "_build-ts": "tsc",
+    "_clean": "rm -rf ./dist",
+    "build": "npm run _clean && npm run tslint && npm run _build-ts",
+    "test": "jest --notify --forceExit --coverage --verbose --config ./jest.conf.json",
+    "tslint": "tslint -c tslint.json -p tsconfig.json -t stylish"
+  },
+  "peerDependencies": {
+    "nodemailer": ">=4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "24.0.11",
+    "@types/node": "11.13.7",
+    "@types/nodemailer": "4.6.7",
+    "jest": "23.6.0",
+    "nodemailer": "6.0.0",
+    "ts-jest": "23.10.5",
+    "tslint": "5.16.0",
+    "tslint-eslint-rules": "5.4.0",
+    "typescript": "3.4.5"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
