@@ -10,6 +10,11 @@ interface GoAuth2 {
   expires_in: number;
 }
 
+interface GmailError {
+  error_description: string;
+  error: string;
+}
+
 export interface Options {
   auth: OAuth2Options;
   autoRefreshToken?: boolean;
@@ -79,8 +84,8 @@ export class GmailTransport implements Transport {
               message: message
             });
           })
-          .catch((e) => done(e));
+          .catch((e: GmailError) => done(new Error(e.error_description)));
       });
-    }).catch((e) => done(e));
+    }).catch((e: GmailError) => done(new Error(e.error_description)));
   }
 }
