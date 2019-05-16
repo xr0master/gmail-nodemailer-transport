@@ -72,6 +72,7 @@ export class GmailTransport implements Transport {
 
   public send(mail: any, done: Function): void {
     this.getAccessToken().then((accessToken: string) => {
+      mail.message.keepBcc = true;
       mail.message.build((error, data: Buffer) => {
         if (error) return done(error);
 
