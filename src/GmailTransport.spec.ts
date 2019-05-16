@@ -8,7 +8,7 @@ test('test the refresh', (done: Function) => {
   expect.assertions(1);
 
   createTransport(new GmailTransport(<Options>{
-    userId: 'sergey@inlightlabs.com',
+    userId: 'me',
     autoRefreshToken: true,
     auth: {
       clientId: 'CLIENT_ID',
@@ -30,11 +30,38 @@ test('test the refresh', (done: Function) => {
   });
 }, 5000);
 
+test('test the bcc', (done: Function) => {
+  expect.assertions(1);
+
+  createTransport(new GmailTransport(<Options>{
+    userId: 'me',
+    autoRefreshToken: true,
+    auth: {
+      clientId: 'CLIENT_ID',
+      clientSecret: 'CLIENT_SECRET',
+      refreshToken: 'REFRESH_TOKEN'
+    }
+  })).sendMail({
+    from: 'sergey@emailjs.com',
+    to: 'sergey@emailjs.com',
+    bcc: 'xr0master@gmail.com',
+    subject: 'Gmail Transport BCC Test',
+    html: '<!DOCTYPE html><html><body><b>This is HTML content</b></body></html>',
+    text: 'This is HTML content'
+  }).then((info) => {
+    accessToken = info.accessToken;
+    expect(info).toBeDefined();
+    done();
+  }).catch((error) => {
+    throw error;
+  });
+}, 5000);
+
 test('test the refresh with wrong auth param', (done: Function) => {
   expect.assertions(1);
 
   createTransport(new GmailTransport(<Options>{
-    userId: 'sergey@inlightlabs.com',
+    userId: 'me',
     autoRefreshToken: true,
     auth: {
       clientId: 'CLIENT_ID',
@@ -59,7 +86,7 @@ test('test the html', (done: Function) => {
   expect.assertions(1);
 
   createTransport(new GmailTransport(<Options>{
-    userId: 'sergey@inlightlabs.com',
+    userId: 'me',
     auth: {
       accessToken: accessToken
     }
