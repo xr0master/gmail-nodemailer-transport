@@ -1,6 +1,6 @@
 {
   "name": "gmail-nodemailer-transport",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Gmail API and Nodemailer v4+. The plugin uses send scope only",
   "private": false,
   "author": "Sergey Khomushin <xr0master@gmail.com>",
