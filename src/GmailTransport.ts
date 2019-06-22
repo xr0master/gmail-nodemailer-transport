@@ -12,7 +12,10 @@ interface GoAuth2 {
 
 interface GmailError {
   error_description: string;
-  error: string | Error;
+  error: string | {
+    code: number,
+    message: string
+  };
 }
 
 export interface Options {
@@ -49,11 +52,11 @@ export class GmailTransport implements Transport {
       return new Error(ge.error_description);
     }
 
-    if (ge.error instanceof Error) {
-      return ge.error;
+    if (typeof ge.error === 'object' && ge.error !== null) {
+      return new Error(ge.error.message);
     }
 
-    return new Error(ge.error);
+    return new Error(<string>ge.error);
   }
 
   private getAccessToken(): Promise<string> {
