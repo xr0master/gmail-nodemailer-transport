@@ -12,7 +12,7 @@ interface GoAuth2 {
 
 interface GmailError {
   error_description: string;
-  error: string;
+  error: string | Error;
 }
 
 export interface Options {
@@ -42,6 +42,18 @@ export class GmailTransport implements Transport {
       refresh_token: auth.refreshToken,
       grant_type: 'refresh_token'
     };
+  }
+
+  private createError(ge: GmailError): Error {
+    if (ge.error_description) {
+      return new Error(ge.error_description);
+    }
+
+    if (ge.error instanceof Error) {
+      return ge.error;
+    }
+
+    return new Error(ge.error);
   }
 
   private getAccessToken(): Promise<string> {
@@ -85,8 +97,8 @@ export class GmailTransport implements Transport {
               message: message
             });
           })
-          .catch((e: GmailError) => done(new Error(e.error_description)));
+          .catch((e: GmailError) => done(this.createError(e)));
       });
-    }).catch((e: GmailError) => done(new Error(e.error_description)));
+    }).catch((e: GmailError) => done(this.createError(e)));
   }
 }
