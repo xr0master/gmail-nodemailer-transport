@@ -105,3 +105,5 @@ export class GmailTransport implements Transport {
     }).catch((e: GmailError) => done(this.createError(e)));
   }
 }
+
+export default GmailTransport;
