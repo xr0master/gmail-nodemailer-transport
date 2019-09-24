@@ -56,7 +56,7 @@ export class GmailTransport implements Transport {
       return new Error(ge.error.message);
     }
 
-    return new Error(<string>ge.error);
+    return new Error(<string>(ge.error || ge));
   }
 
   private getAccessToken(): Promise<string> {
