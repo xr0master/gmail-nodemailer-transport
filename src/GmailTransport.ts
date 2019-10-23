@@ -10,17 +10,18 @@ interface GoAuth2 {
   expires_in: number;
 }
 
+interface GmailErrorObject {
+  code: number;
+  message: string;
+}
+
 interface GmailError {
   error_description: string;
-  error: string | {
-    code: number,
-    message: string
-  };
+  error: string | GmailErrorObject;
 }
 
 export interface Options {
   auth: OAuth2Options;
-  autoRefreshToken?: boolean;
   userId?: string;
 }
 
@@ -60,10 +61,6 @@ export class GmailTransport implements Transport {
   }
 
   private getAccessToken(): Promise<string> {
-    if (!this.options.autoRefreshToken) {
-      return Promise.resolve(this.options.auth.accessToken);
-    }
-
     return Requestly.post({
       protocol: 'https:',
       hostname: 'www.googleapis.com',
@@ -86,23 +83,34 @@ export class GmailTransport implements Transport {
   }
 
   public send(mail: any, done: Function): void {
-    this.getAccessToken().then((accessToken: string) => {
-      mail.message.keepBcc = true;
-      mail.message.build((error, data: Buffer) => {
-        if (error) return done(error);
+    mail.message.keepBcc = true;
+    mail.message.build((error, data: Buffer) => {
+      if (error) return done(error);
 
-        this.sendMail(data, accessToken)
-          .then((message) => {
-            done(null, {
-              envelope: mail.message.getEnvelope(),
-              messageId: mail.message.messageId(),
-              accessToken: accessToken,
-              message: message
-            });
-          })
-          .catch((e: GmailError) => done(this.createError(e)));
+      this.sendMail(data, this.options.auth.accessToken).then((message) => {
+        done(null, {
+          envelope: mail.message.getEnvelope(),
+          messageId: mail.message.messageId(),
+          accessToken: this.options.auth.accessToken,
+          message: message
+        });
+      }, (e: GmailError) => {
+        if ((<GmailErrorObject>e.error).code === 401 && this.options.auth.refreshToken) {
+          this.getAccessToken().then((accessToken: string) => {
+            this.sendMail(data, accessToken).then((message) => {
+              done(null, {
+                envelope: mail.message.getEnvelope(),
+                messageId: mail.message.messageId(),
+                accessToken: accessToken,
+                message: message
+              });
+            }).catch((er: GmailError) => done(this.createError(er)));
+          }).catch((er: GmailError) => done(this.createError(er)));
+        } else {
+          done(this.createError(e));
+        }
       });
-    }).catch((e: GmailError) => done(this.createError(e)));
+    });
   }
 }
 
