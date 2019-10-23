@@ -2,18 +2,21 @@ import {createTransport} from 'nodemailer';
 import {Attachment} from 'nodemailer/lib/mailer';
 import {GmailTransport, Options} from './GmailTransport';
 
-let accessToken: string = '';
+let accessToken: string = 'ACCESS_TOKEN';
+let refreshToken: string = 'REFRESH_TOKEN';
+let clientId: string = 'CLIENT_ID';
+let clientSecret: string = 'CLIENT_SECRET';
 
 test('test the refresh', (done: Function) => {
   expect.assertions(1);
 
   createTransport(new GmailTransport(<Options>{
     userId: 'me',
-    autoRefreshToken: true,
     auth: {
-      clientId: 'CLIENT_ID',
-      clientSecret: 'CLIENT_SECRET',
-      refreshToken: 'REFRESH_TOKEN'
+      clientId: clientId,
+      clientSecret: clientSecret,
+      accessToken: accessToken,
+      refreshToken: refreshToken
     }
   })).sendMail({
     from: 'sergey@emailjs.com',
@@ -35,11 +38,11 @@ test('test the bcc', (done: Function) => {
 
   createTransport(new GmailTransport(<Options>{
     userId: 'me',
-    autoRefreshToken: true,
     auth: {
-      clientId: 'CLIENT_ID',
-      clientSecret: 'CLIENT_SECRET',
-      refreshToken: 'REFRESH_TOKEN'
+      clientId: clientId,
+      clientSecret: clientSecret,
+      accessToken: accessToken,
+      refreshToken: refreshToken
     }
   })).sendMail({
     from: 'sergey@emailjs.com',
@@ -62,11 +65,11 @@ test('test the refresh with wrong auth param', (done: Function) => {
 
   createTransport(new GmailTransport(<Options>{
     userId: 'me',
-    autoRefreshToken: true,
     auth: {
-      clientId: 'CLIENT_ID',
-      clientSecret: 'CLIENT_SECRET',
-      refreshToken: 'REFRESH_TOKEN'
+      clientId: clientId,
+      clientSecret: clientSecret,
+      accessToken: accessToken,
+      refreshToken: refreshToken + 'wrong'
     }
   })).sendMail({
     from: 'sergey@emailjs.com',
@@ -160,7 +163,7 @@ test('test the Gmail error', (done: Function) => {
 
   createTransport(new GmailTransport(<Options>{
     auth: {
-      accessToken: accessToken
+      accessToken: accessToken + 'wrong'
     }
   })).sendMail({
 
