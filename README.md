@@ -22,7 +22,7 @@ $ npm install gmail-nodemailer-transport --save
 
 ## Examples
 
-__send simple email by accessToken__
+__send the simple email by the access token__
 ``` js
   'use strict';
   const nodemailer = require('nodemailer');
@@ -48,7 +48,7 @@ __send simple email by accessToken__
   });
 ```
 
-__send simple email by refreshToken__
+__send the simple email, if it's failed to refresh the access token__
 ``` js
   'use strict';
   const nodemailer = require('nodemailer');
@@ -56,11 +56,11 @@ __send simple email by refreshToken__
 
   let transporter = nodemailer.createTransport(new GmailTransport({
     userId: 'my-address@gmail.com',
-    autoRefreshToken: true,
     auth: {
       clientId: 'clien-id.apps.googleusercontent.com',
       clientSecret: 'clint-secret',
-      refreshToken: '1/EAATBaMn-refresh-token'
+      refreshToken: '1/EAATBaMn-refresh-token',
+      accessToken: 'ya29.Glv5BvE5y-access-token'
     }
   }));
 
@@ -77,7 +77,7 @@ __send simple email by refreshToken__
   });
 ```
 
-__send attachment and add to content__
+__send an attachment and embed it to the content__
 ``` js
   'use strict';
   const nodemailer = require('nodemailer');
