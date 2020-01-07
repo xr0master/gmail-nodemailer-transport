@@ -95,7 +95,7 @@ export class GmailTransport implements Transport {
           message: message
         });
       }, (e: GmailError) => {
-        if ((<GmailErrorObject>e.error).code === 401 && this.options.auth.refreshToken) {
+        if (e.error && (e.error as GmailErrorObject).code === 401 && this.options.auth.refreshToken) {
           this.getAccessToken().then((accessToken: string) => {
             this.sendMail(data, accessToken).then((message) => {
               done(null, {
