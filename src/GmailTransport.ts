@@ -49,6 +49,11 @@ export class GmailTransport implements Transport {
   }
 
   private createError(ge: GmailError): Error {
+    if (ge.error === 'invalid_grant') {
+      // return a better message instead of 'Bad Request' from Gmail error_description.
+      return new Error('Invalid grant. Please reconnect your Gmail account');
+    }
+
     if (ge.error_description) {
       return new Error(ge.error_description);
     }
