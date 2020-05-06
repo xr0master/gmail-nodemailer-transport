@@ -60,15 +60,13 @@ export namespace Requestly {
     return sendRequest(options, postData);
   }
 
-  export function postJSON(options: RequestOptions, data: Object): Promise<any> {
-    let json: string = JSON.stringify(data);
-
+  export function postRFC822(options: RequestOptions, data: string): Promise<any> {
     options.method = 'POST';
     options.headers = Object.assign(options.headers || {}, {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(json)
+      'Content-Type': 'message/rfc822',
+      'Content-Length': Buffer.byteLength(data)
     });
 
-    return sendRequest(options, json);
+    return sendRequest(options, data);
   }
 }

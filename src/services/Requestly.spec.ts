@@ -1,6 +1,6 @@
 import {Requestly} from './Requestly';
 
-test ('send post request', (done: Function) => {
+it ('should send post request', (done) => {
   expect.assertions(1);
 
   return Requestly.post({
@@ -18,16 +18,14 @@ test ('send post request', (done: Function) => {
     });
 });
 
-test ('send post JSON request', (done: Function) => {
+it ('should send post RFC822 request', (done) => {
   expect.assertions(1);
 
-  return Requestly.postJSON({
+  return Requestly.postRFC822({
     protocol: 'https:',
     hostname: 'httpbin.org',
     path: '/post'
-  }, {
-    user_id: 'test'
-  })
+  }, 'test')
   .then((resolve) => {
     expect(resolve).toBeDefined();
     done();
