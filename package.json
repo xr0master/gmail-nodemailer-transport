@@ -23,7 +23,7 @@
     "_clean": "rm -rf ./dist",
     "build": "npm run _clean && npm run tslint && npm run _build-ts",
     "test": "jest --notify --forceExit --coverage --verbose --config ./jest.conf.json",
-    "tslint": "tslint -c tslint.json -p tsconfig.json -t stylish"
+    "tslint": "tsc --noEmit && tslint -c tslint.json -p tsconfig.json -t stylish"
   },
   "peerDependencies": {
     "nodemailer": ">=4.0.0"
@@ -40,6 +40,6 @@
     "typescript": "3.8.3"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=10.0.0"
   }
 }
