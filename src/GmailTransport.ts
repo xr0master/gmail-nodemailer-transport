@@ -1,6 +1,14 @@
-import {Transport} from 'nodemailer';
+import type {SentMessageInfo, Transport} from 'nodemailer';
+import type {Options as OAuth2Options} from 'nodemailer/lib/xoauth2';
+import type MailMessage from 'nodemailer/lib/mailer/mail-message';
+
 import {Requestly} from './services/Requestly';
-import {Options as OAuth2Options} from 'nodemailer/lib/xoauth2';
+
+type MailMessageWithBcc = MailMessage & {
+  message: {
+    keepBcc: boolean
+  }
+};
 
 interface GoAuth2 {
   access_token: string;
@@ -74,7 +82,7 @@ export class GmailTransport implements Transport {
       .then((data: GoAuth2) => data.access_token);
   }
 
-  private sendMail(message: any, accessToken: string): Promise<any> {
+  private sendMail(message: Buffer, accessToken: string): Promise<any> {
     return Requestly.postJSON({
       protocol: 'https:',
       hostname: 'www.googleapis.com',
@@ -87,7 +95,7 @@ export class GmailTransport implements Transport {
     });
   }
 
-  public send(mail: any, done: Function): void {
+  public send(mail: MailMessageWithBcc, done: (err: Error | null, info?: SentMessageInfo) => void): void {
     mail.message.keepBcc = true;
     mail.message.build((error, data: Buffer) => {
       if (error) return done(error);
