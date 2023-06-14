@@ -1,35 +1,46 @@
-import {Requestly} from './Requestly';
+import { post, postRFC822 } from './Requestly';
 
-it ('should send post request', (done) => {
-  expect.assertions(1);
+interface HTTPBin {
+  form?: {
+    id: string;
+  };
+  data?: string;
+}
 
-  return Requestly.post({
-    protocol: 'https:',
-    hostname: 'httpbin.org',
-    path: '/post'
-  }, {
-    user_id: 'test'
-  })
-    .then((resolve) => {
-      expect(resolve.form.user_id).toBeDefined();
-      done();
-    }, (error) => {
+it('should send post request', async () => {
+  return post<HTTPBin>(
+    {
+      protocol: 'https:',
+      hostname: 'httpbin.org',
+      path: '/post',
+    },
+    {
+      id: 'test',
+    },
+  ).then(
+    (data) => {
+      expect((data as HTTPBin).form!.id).toEqual('test');
+    },
+    (error) => {
       throw error;
-    });
+    },
+  );
 });
 
-it ('should send post RFC822 request', (done) => {
-  expect.assertions(1);
-
-  return Requestly.postRFC822({
-    protocol: 'https:',
-    hostname: 'httpbin.org',
-    path: '/post'
-  }, 'test')
-  .then((resolve) => {
-    expect(resolve).toBeDefined();
-    done();
-  }, (error) => {
-    throw error;
-  });
+it('should send post RFC822 request', async () => {
+  return postRFC822<HTTPBin>(
+    {
+      protocol: 'https:',
+      hostname: 'httpbin.org',
+      path: '/post',
+    },
+    'test',
+  ).then(
+    (data) => {
+      expect((data as HTTPBin).data).toEqual('test');
+    },
+    (error) => {
+      throw error;
+    },
+  );
 });
