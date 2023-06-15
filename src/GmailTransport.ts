@@ -41,7 +41,7 @@ function getErrorCode(error: GmailError['error']) {
 }
 
 function createError(ge: GmailError | string) {
-  if (!(typeof ge === 'object' && ge !== null)) return new Error(ge as string);
+  if (!(typeof ge === 'object' && ge !== null)) return new Error(ge);
 
   if (ge.error === 'invalid_grant') {
     // return a better message instead of 'Bad Request' from the Gmail error_description.
@@ -56,7 +56,7 @@ function createError(ge: GmailError | string) {
     return new Error(ge.error.message);
   }
 
-  return new Error(ge.error as string);
+  return new Error(ge.error);
 }
 
 interface GoAuth2 {
@@ -68,8 +68,8 @@ interface GoAuth2 {
 }
 
 export class GmailTransport implements Transport {
-  public name: string = 'GmailTransport';
-  public version: string = 'N/A';
+  public name = 'GmailTransport';
+  public version = 'N/A';
 
   constructor(private options: Options) {}
 
